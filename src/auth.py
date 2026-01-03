@@ -8,12 +8,24 @@ SCOPES = [
     'https://www.googleapis.com/auth/spreadsheets'
 ]
 
-def get_service_account_creds():
-    """Authenticates using the Service Account file."""
+def get_service_account_creds(credentials_dict=None):
+    """
+    Authenticates using Service Account credentials.
+    
+    Args:
+        credentials_dict: Optional dict from uploaded JSON. If None, falls back to file.
+    """
     try:
-        creds = service_account.Credentials.from_service_account_file(
-            Config.SERVICE_ACCOUNT_FILE, scopes=SCOPES
-        )
+        if credentials_dict:
+            # Use uploaded credentials (from Streamlit file uploader)
+            creds = service_account.Credentials.from_service_account_info(
+                credentials_dict, scopes=SCOPES
+            )
+        else:
+            # Fallback to file on disk
+            creds = service_account.Credentials.from_service_account_file(
+                Config.SERVICE_ACCOUNT_FILE, scopes=SCOPES
+            )
         return creds
     except Exception as e:
         print(f"Error loading service account credentials: {e}")

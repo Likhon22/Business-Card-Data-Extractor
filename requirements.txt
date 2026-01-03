@@ -3,3 +3,4 @@ google-genai
 gspread
 Pillow
 python-dotenv
+streamlit
